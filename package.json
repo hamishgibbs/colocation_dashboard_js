@@ -1,0 +1,25 @@
+{
+  "name": "colocation_dashboard_js",
+  "version": "1.0.0",
+  "description": "js package to support colocation_dashboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hamishgibbs/colocation_dashboard_js.git"
+  },
+  "author": "Hamish Gibbs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hamishgibbs/colocation_dashboard_js/issues"
+  },
+  "homepage": "https://github.com/hamishgibbs/colocation_dashboard_js#readme",
+  "devDependencies": {
+    "grunt": "^1.0.4",
+    "grunt-contrib-jshint": "^2.1.0",
+    "grunt-contrib-nodeunit": "^2.1.0",
+    "grunt-contrib-uglify": "^4.0.1"
+  }
+}
