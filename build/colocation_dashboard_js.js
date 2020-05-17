@@ -35,11 +35,11 @@ styleArea = function(area, cls){
 
 	area_polygons = d3.selectAll(".country")._groups[0]
 
-    for(i in area_polygons){
-
-      if(area_polygons[i].getAttribute("polygon-name") == area){
-        area_polygons[i].setAttribute("class", cls)
-      }
+    for(i = 0; i < area_polygons.length; i++){
+    	
+	    if(area_polygons[i].getAttribute("polygon-name") == area){
+	      area_polygons[i].setAttribute("class", cls)
+	    }
     }
 
 }
@@ -225,16 +225,20 @@ ac_panel = function(){
 	this.default_area = "Greater London"
 
 	this.margin = {top: 10, right: 50, bottom: 0, left: 40};
-	this.containerDims = d3.select("#panel-c").node().getBoundingClientRect()
-	this.width = this.containerDims.width - this.margin.left - this.margin.right;
-    this.height = this.containerDims.height - this.margin.top - this.margin.bottom;
 
 	this.setupAcPanel = function(){
 		this.svg = d3.select("#panel-c")
+      .append("div")
+      .attr("class", "ac-plot-container")
+      .attr("id", "ac-plot-c")
 			.append("svg")
 			.attr("class", "ac-plot")
 			.append("g")
 			.attr("class", "ac-plot-content")
+
+    this.containerDims = d3.select("#ac-plot-c").node().getBoundingClientRect()
+    this.width = this.containerDims.width - this.margin.left - this.margin.right;
+    this.height = this.containerDims.height - this.margin.top - this.margin.bottom;
 
 		this.sankey = d3.sankey()
 		    .nodeWidth(30)	
@@ -365,8 +369,6 @@ ac_panel = function(){
         .append('div')
         .attr("class", "figure-caption")
       .attr("id", "ac-caption")
-
-    console.log(fig_captions1.ac_caption)
 
     $("#ac-caption").html(fig_captions1.ac_caption)
   }
@@ -877,8 +879,6 @@ tsButtonClick = function(){
 
 	createTsSummaryButtons("panel-c")
 
-	console.log(ts_plot1)
-
 	ts_plot1.addCaption()
 
 	try{unstyleArea('area-active')}catch(error){console.log(error)}
@@ -931,9 +931,9 @@ acButtonClick = function(){
 
 	ac_panel1.setupAcPanel()
 
-	//ac_panel1.addCaption()
-
 	ac_panel1.addPlotContent(ac_panel1.default_area)
+
+	ac_panel1.addCaption()
 
 	try{unstyleArea('area-active')}catch(error){console.log(error)}
 }

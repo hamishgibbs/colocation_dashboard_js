@@ -6,16 +6,20 @@ ac_panel = function(){
 	this.default_area = "Greater London"
 
 	this.margin = {top: 10, right: 50, bottom: 0, left: 40};
-	this.containerDims = d3.select("#panel-c").node().getBoundingClientRect()
-	this.width = this.containerDims.width - this.margin.left - this.margin.right;
-    this.height = this.containerDims.height - this.margin.top - this.margin.bottom;
 
 	this.setupAcPanel = function(){
 		this.svg = d3.select("#panel-c")
+      .append("div")
+      .attr("class", "ac-plot-container")
+      .attr("id", "ac-plot-c")
 			.append("svg")
 			.attr("class", "ac-plot")
 			.append("g")
 			.attr("class", "ac-plot-content")
+
+    this.containerDims = d3.select("#ac-plot-c").node().getBoundingClientRect()
+    this.width = this.containerDims.width - this.margin.left - this.margin.right;
+    this.height = this.containerDims.height - this.margin.top - this.margin.bottom;
 
 		this.sankey = d3.sankey()
 		    .nodeWidth(30)	
@@ -146,8 +150,6 @@ ac_panel = function(){
         .append('div')
         .attr("class", "figure-caption")
       .attr("id", "ac-caption")
-
-    console.log(fig_captions1.ac_caption)
 
     $("#ac-caption").html(fig_captions1.ac_caption)
   }

@@ -40,8 +40,6 @@ tsButtonClick = function(){
 
 	createTsSummaryButtons("panel-c")
 
-	console.log(ts_plot1)
-
 	ts_plot1.addCaption()
 
 	try{unstyleArea('area-active')}catch(error){console.log(error)}
@@ -94,9 +92,9 @@ acButtonClick = function(){
 
 	ac_panel1.setupAcPanel()
 
-	//ac_panel1.addCaption()
-
 	ac_panel1.addPlotContent(ac_panel1.default_area)
+
+	ac_panel1.addCaption()
 
 	try{unstyleArea('area-active')}catch(error){console.log(error)}
 }

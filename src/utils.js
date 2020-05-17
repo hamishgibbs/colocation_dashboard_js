@@ -34,11 +34,11 @@ styleArea = function(area, cls){
 
 	area_polygons = d3.selectAll(".country")._groups[0]
 
-    for(i in area_polygons){
-
-      if(area_polygons[i].getAttribute("polygon-name") == area){
-        area_polygons[i].setAttribute("class", cls)
-      }
+    for(i = 0; i < area_polygons.length; i++){
+    	
+	    if(area_polygons[i].getAttribute("polygon-name") == area){
+	      area_polygons[i].setAttribute("class", cls)
+	    }
     }
 
 }
