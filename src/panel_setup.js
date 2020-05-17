@@ -94,7 +94,7 @@ acButtonClick = function(){
 
 	ac_panel1.setupAcPanel()
 
-	ac_panel1.addCaption()
+	//ac_panel1.addCaption()
 
 	ac_panel1.addPlotContent(ac_panel1.default_area)
 
