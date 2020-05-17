@@ -138,7 +138,7 @@ $('select').on('change', function() {
 
 /* refactor into a module asap */
 
-geodata_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/geodata/UK_simple.geojson?token=AMBPN73QL5NPJQGMNVT3YYS6ZEXXA"
+geodata_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/geodata/UK_simple.geojson"
 
 map_svg = d3.select("#main-m")
 
@@ -218,7 +218,7 @@ mainMapClick = function(){
 
 }
 ac_panel = function(){
-	this.data_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/data/top_n_between.csv?token=AMBPN7Z5M4FWWPHZJ5T2KLC6ZEX54"
+	this.data_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/data/top_n_between.csv"
 
 	this.data = null
 
@@ -705,8 +705,8 @@ d3.sankey = function() {
 };
 
 ov_panel = function(){
-	this.image_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.png?token=AMBPN77JGGJC7WCEQJFNAGS6ZJOBW"
-	this.image_svg_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.svg?token=AMBPN72Q3JPY4GHSSRTLM226YDTVE"
+	this.image_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.png"
+
 	this.setupOvPanel = function(){
 
 		this.container = d3.select("#panel-c")
@@ -743,7 +743,7 @@ ov_panel = function(){
 	this.blurb_text = null
 }
 
-var blurb_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/blurb.html?token=AMBPN76YXBH2X477JHLXUY26ZB364"
+var blurb_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/blurb.html"
 
 $.ajax({
     url : blurb_url,
@@ -826,7 +826,7 @@ description_panel = function(){
 	}
 }
 
-var description_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/description.html?token=AMBPN75TSPROKJZZP4WJPDS6ZB4EQ"
+var description_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/description.html"
 
 $.ajax({
     url : description_url,
@@ -999,7 +999,7 @@ $("#active-button").click()
 /*load data from urls and add as a window attribute */
 addDropdownElement
 
-ts_data_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/data/mean_ts.csv?token=AMBPN77B6ZW36RRVNPGE2C26ZEX3C"
+ts_data_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/data/mean_ts.csv"
 
 var parseTime = d3.timeParse("%Y-%m-%d");
 

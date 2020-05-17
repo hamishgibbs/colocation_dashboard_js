@@ -1,6 +1,6 @@
 ov_panel = function(){
-	this.image_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.png?token=AMBPN77JGGJC7WCEQJFNAGS6ZJOBW"
-	this.image_svg_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.svg?token=AMBPN72Q3JPY4GHSSRTLM226YDTVE"
+	this.image_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.png"
+
 	this.setupOvPanel = function(){
 
 		this.container = d3.select("#panel-c")
@@ -37,7 +37,7 @@ ov_panel = function(){
 	this.blurb_text = null
 }
 
-var blurb_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/blurb.html?token=AMBPN76YXBH2X477JHLXUY26ZB364"
+var blurb_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/blurb.html"
 
 $.ajax({
     url : blurb_url,

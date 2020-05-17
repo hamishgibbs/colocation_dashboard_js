@@ -1,6 +1,6 @@
 addDropdownElement
 
-ts_data_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/data/mean_ts.csv?token=AMBPN77B6ZW36RRVNPGE2C26ZEX3C"
+ts_data_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/data/mean_ts.csv"
 
 var parseTime = d3.timeParse("%Y-%m-%d");
 

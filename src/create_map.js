@@ -1,7 +1,7 @@
 
 /* refactor into a module asap */
 
-geodata_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/geodata/UK_simple.geojson?token=AMBPN73QL5NPJQGMNVT3YYS6ZEXXA"
+geodata_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/geodata/UK_simple.geojson"
 
 map_svg = d3.select("#main-m")
 

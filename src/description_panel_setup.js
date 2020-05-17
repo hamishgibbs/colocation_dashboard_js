@@ -71,7 +71,7 @@ description_panel = function(){
 	}
 }
 
-var description_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/description.html?token=AMBPN75TSPROKJZZP4WJPDS6ZB4EQ"
+var description_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/description.html"
 
 $.ajax({
     url : description_url,
