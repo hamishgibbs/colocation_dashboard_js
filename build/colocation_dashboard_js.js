@@ -1167,13 +1167,13 @@ summaryButtonClick = function(){
 
 var ts_plot1 = new ts_plot()
 
-ts_plot1.y_label = "colocation probabilty % change outside home area"
+ts_plot1.y_label = "% change of mean colocation probability"
 
 ts_plot1.appendSVG('panel-c', 'ts1-c', 'ts-container', 'ts1', 'ts-plot')
 
 var ts_plot2 = new ts_plot()
 
-ts_plot2.y_label = "Probabilty of colocation outside home area"
+ts_plot2.y_label = "Mean probability of colocation"
 
 ts_plot2.appendSVG('panel-c', 'ts2-c', 'ts-container', 'ts2', 'ts-plot')
 
@@ -1189,6 +1189,15 @@ Promise.all([d3.csv(ts_data_url, d3.autoType)]).then(function(data){
 	area_names = data.map(function(d){ return d.polygon1_name }).filter( onlyUnique )
 
 	ts_plot1.area_names = area_names
+
+	/* Add default dropdown element */
+	d3.select("#area-d")
+		.append("option")
+		.attr("value", "Select")
+		.text("Select")
+		.attr("class", "dropdown-element")
+		.attr("disabled", true)
+		.attr("visibility", "hidden")
 
 	for (i in area_names){
 		addDropdownElement(area_names[i], area_names[i], "dropdown-element", "area-d")
