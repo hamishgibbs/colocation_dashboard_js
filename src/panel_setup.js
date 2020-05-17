@@ -39,6 +39,8 @@ tsButtonClick = function(){
 		.text(ts_plot1.default_area)
 
 	createTsSummaryButtons("panel-c")
+
+	unstyleArea('area-active')
 }
 
 
@@ -56,6 +58,8 @@ ovButtonClick = function(){
 
 	ov_panel1.setupOvPanel()
 
+	unstyleArea('area-active')
+
 }
 
 description_panel1 = new description_panel
@@ -71,6 +75,7 @@ ddButtonClick = function(){
 
 	description_panel1.setupDdPanel()
 
+	unstyleArea('area-active')
 
 }
 
@@ -86,6 +91,8 @@ acButtonClick = function(){
 	ac_panel1.setupAcPanel()
 
 	ac_panel1.addPlotContent(ac_panel1.default_area)
+
+	unstyleArea('area-active')
 }
 
 /*in this panel - just give premade pngs */
