@@ -1,5 +1,5 @@
 ov_panel = function(){
-	this.image_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.png?token=AMBPN77L7MVIQHY5KOXUTVC6YBTRO"
+	this.image_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.png?token=AMBPN77JGGJC7WCEQJFNAGS6ZJOBW"
 	this.image_svg_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.svg?token=AMBPN72Q3JPY4GHSSRTLM226YDTVE"
 	this.setupOvPanel = function(){
 

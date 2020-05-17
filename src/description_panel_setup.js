@@ -64,7 +64,7 @@ description_panel = function(){
 			.append("div")
 			.attr("class", "author-container")
 			.attr("id", "author-panel")
-			.text("Visualisation by Hamish Gibbs. Supported by CMMID Covid-19 Working Group, Rosalind M Eggo, and Adam Kucharski.")
+			.text("Visualisation by Hamish Gibbs. Supported by CMMID Covid-19 Working Group, Rosalind M Eggo, Chris Grundy, and Adam Kucharski.")
 
 		$(".description-text").html(this.description_text)
 		

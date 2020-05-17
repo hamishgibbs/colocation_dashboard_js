@@ -1,4 +1,4 @@
-/*! colocation_dashboard_js 2020-05-16 */
+/*! colocation_dashboard_js 2020-05-17 */
 
 function onlyUnique(value, index, self) { 
     return self.indexOf(value) === index;
@@ -53,47 +53,6 @@ unstyleArea = function(cls){
   	selected_area.attr("class", "country " + country)
 }
 
-ov_panel = function(){
-	this.image_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.png?token=AMBPN77L7MVIQHY5KOXUTVC6YBTRO"
-	this.image_svg_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.svg?token=AMBPN72Q3JPY4GHSSRTLM226YDTVE"
-	this.setupOvPanel = function(){
-
-		this.container = d3.select("#panel-c")
-			.append("div")
-			.attr("class", "ov-container")
-		
-		containerDims = this.container.node().getBoundingClientRect();
-
-		this.container
-			.append("div")
-			.attr("class", "area-title-container")
-			.text("Facebook Colocation Data")
-
-		this.container 
-			.append("img")
-				.attr("src", this.image_url)
-				.attr("class", "ov-image")
-
-		this.container.append("div")
-			.attr("class", "ov-blurb")
-
-		$(".ov-blurb").html(this.blurb_text)
-				
-	}
-
-	this.blurb_text = null
-}
-
-var blurb_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/blurb.html?token=AMBPN76YXBH2X477JHLXUY26ZB364"
-
-$.ajax({
-    url : blurb_url,
-    dataType: "text",
-    success : function (data) {
-    	ov_panel1.blurb_text = data
-        $(".ov-blurb").html(data);
-    }
-});
 /* keep all css definitions in the css file */
 d3.select("#map-c")
 	.append("svg")
@@ -138,7 +97,7 @@ $('select').on('change', function() {
 
 /* refactor into a module asap */
 
-geodata_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/geodata/UK_simple.geojson?token=AMBPN7YM2VWD5RVOGNE5GHS6X6I3E"
+geodata_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/geodata/UK_simple.geojson?token=AMBPN73QL5NPJQGMNVT3YYS6ZEXXA"
 
 map_svg = d3.select("#main-m")
 
@@ -219,286 +178,8 @@ mainMapClick = function(){
 
 
 }
-addDropdownElement
-
-ts_data_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/data/mean_ts.csv?token=AMBPN75YWOFQOKKCQ6GJIB26X6JJE"
-
-var parseTime = d3.timeParse("%Y-%m-%d");
-
-ts_plot = function(){
-	this.data = null;
-
-	this.area_names = null;
-
-	this.y_label = null;
-
-	this.dataset_type = null;
-
-	this.default_area = "Greater London";
-
-	this.margin = {top: 0, right: 30, bottom: 50, left: 70}
-
-	this.printData = function(){console.log(this.data)};
-
-	this.appendSVG = function(panel_id, container_id, container_cls, svg_id, svg_cls){
-
-		this.panel = d3.select("#" + panel_id)
-		this.container = d3.select("#" + container_id)
-
-		d3.select("#" + panel_id)
-			.append('div')
-			.attr("id", container_id)
-			.attr("class", container_cls)
-
-		this.svg = d3.select('#' + container_id)
-			.append('svg')
-			.attr("id", svg_id)
-			.attr("class", svg_cls)
-			.append("g")
-    		.attr("transform",
-          "translate(" + this.margin.left + "," + this.margin.top + ")");
-			
-	};
-
-	this.defineAxes = function(container_id, data){
-
-		var containerDims = d3.select("#" + container_id).node().getBoundingClientRect();
-		
-		this.width = containerDims.width - this.margin.left - this.margin.right;
-		this.height = containerDims.height - this.margin.top - this.margin.bottom;
-
-		this.x = d3.scaleTime().range([0, this.width]);
-		this.y = d3.scaleLinear().range([this.height, 0]);
-
-		this.x.domain(d3.extent(data, function(d) { return d.ds; }));
-  		this.y.domain([d3.min(data, function(d) { return d.mean_colocation; }), d3.max(data, function(d) { return d.mean_colocation; })]);
-  		
-
-  		var x = this.x
-  		var y = this.y
-
-  		/*namespace issue - not this */ 
-  		this.plotLine = d3.line()
-    					.x(function(d) { return x(d.ds); })
-    					.y(function(d) { return y(d.mean_colocation); });
-	};
-
-	this.layoutPlot = function(){
-
-		this.svg
-			.append("g")
-			.attr("transform", "translate(0," + this.height + ")")
-			.call(d3.axisBottom(this.x));
-
-		this.svg
-			.append("g")
-      		.call(d3.axisLeft(this.y));
-
-      	this.svg
-	    	.append("text")
-	        .attr("transform", "rotate(-90)")
-	        .attr("y", 0 - this.margin.left)
-	        .attr("x",0 - (this.height / 2))
-	        .attr("dy", "1em")
-	        .style("text-anchor", "middle")
-	        .text(this.y_label);
-
-	    this.addPlotContent(this.default_area)
-
-	    this.tooltip_div = this.container.append("div")	
-    		.attr("class", "tooltip")				
-    		.style("opacity", 0);
-	      
-	};
-
-    this.addPlotContent = function(area){
-
-    	if (['England', 'Wales', 'Scotland', 'Northern Ireland'].includes(area)){
-    		plot_data = this.data.filter(function(d){ return d.NAME_1 == area;})
-
-    		area_names = plot_data.map(function(d){ return d.polygon1_name }).filter( onlyUnique )
-
-    		for(i in area_names){
-    			area_data = plot_data.filter(function(d){ return d.polygon1_name == area_names[i];})
-
-    			this.svg
-	    		.append("path")
-	      		.data([area_data])
-	      		.attr("class", "ts-plot-content summary" + " " + this.dataset_type)
-	      		.attr("d", this.plotLine)
-	      		.attr("value", area_names[i])
-	      		.on("mouseover", this.changeTitle)
-	      		.on("mouseout", this.resetTitle);
-
-    		}
-
-    	}else{
-    		plot_data = this.data.filter(function(d){ return d.polygon1_name == area;})
-
-    		this.svg
-	    		.append("path")
-	      		.data([plot_data])
-	      		.attr("class", "ts-plot-content" + " " + this.dataset_type)
-	      		.attr("d", this.plotLine);
-
-    	}
-    	
-    	/* line not appearing correctly here - style issue?*/ 
-
-    };
-
-    this.changeTitle = function(){
-
-    	d3.select("#area-title-c")
-			.text(d3.select(this).attr("value"))
-
-	}
-
-	this.resetTitle = function(){
-		console.log(d3.select("#summary-button-active").text())
-    	d3.select("#area-title-c")
-			.text(d3.select("#summary-button-active").text())
-
-	}
-
-
-    this.removePlotContent = function(){
-    	d3.selectAll('.ts-plot-content').remove()
-    }
-
-}
-
-
-/*add div to hold title */
-createTsSummaryButtons = function(panel_id){
-		
-		d3.select("#" + panel_id)
-			.append("div")
-		    .attr("class", "button-spacer")
-
-		d3.select("#" + panel_id)
-			.append("button")
-			.attr("value", "England")
-			.text("England")
-			.attr("class", "summary-button")
-			.on("click", summaryButtonClick)
-
-		d3.select("#" + panel_id)
-			.append("div")
-		    .attr("class", "button-spacer")
-
-		d3.select("#" + panel_id)
-			.append("button")
-			.attr("value", "Wales")
-			.text("Wales")
-			.attr("class", "summary-button")
-			.on("click", summaryButtonClick)
-	
-		d3.select("#" + panel_id)
-			.append("div")
-		    .attr("class", "button-spacer")
-
-		d3.select("#" + panel_id)
-			.append("button")
-			.attr("value", "Scotland")
-			.text("Scotland")
-			.attr("class", "summary-button")
-			.on("click", summaryButtonClick)
-
-		d3.select("#" + panel_id)
-			.append("div")
-		    .attr("class", "button-spacer")
-		 
-		d3.select("#" + panel_id)
-			.append("button")
-			.attr("value", "Northern Ireland")
-			.text("Northern Ireland")
-			.attr("class", "summary-button")
-			.on("click", summaryButtonClick)
-}
-
-summaryButtonClick = function(){
-
-	d3.selectAll(".summary-button")
-		.attr("id", null)
-
-	d3.select(this)
-		.attr("id", "summary-button-active")
-
-	ts_plot1.removePlotContent()
-
-	ts_plot2.removePlotContent()
-
-	ts_plot1.addPlotContent(this.value)
-
-	ts_plot2.addPlotContent(this.value)
-
-	d3.select("#area-title-c")
-		.text(this.value)
-}
-
-
-var ts_plot1 = new ts_plot()
-
-ts_plot1.y_label = "% change of colocation probabilty outside home area"
-
-ts_plot1.appendSVG('panel-c', 'ts1-c', 'ts-container', 'ts1', 'ts-plot')
-
-var ts_plot2 = new ts_plot()
-
-ts_plot2.y_label = "Probabilty of colocation outside home area"
-
-ts_plot2.appendSVG('panel-c', 'ts2-c', 'ts-container', 'ts2', 'ts-plot')
-
-ts_plot1.dataset_type = 'between'
-
-ts_plot2.dataset_type = 'within'
-
-/* remember to parse up here */
-Promise.all([d3.csv(ts_data_url, d3.autoType)]).then(function(data){
-
-	data = data[0]
-	/*parsing issue */
-	area_names = data.map(function(d){ return d.polygon1_name }).filter( onlyUnique )
-
-	ts_plot1.area_names = area_names
-
-	for (i in area_names){
-		addDropdownElement(area_names[i], area_names[i], "dropdown-element", "area-d")
-	}
-
-	perc_data = data.filter(function(d){ return d.type == 'perc_change';})
-	/* threshold within data so that it is < 0.025 (remove outliers) */
-	perc_data = perc_data.filter(function(d){ return d.mean_colocation <= 200;})
-
-	abs_data = data.filter(function(d){ return d.type == 'abs_value';})
-	
-	console.log(perc_data)
-	console.log(abs_data)
-
-	/* divide data within and between */
-	ts_plot1.data = perc_data
-	ts_plot2.data = abs_data
-
-
-	ts_plot1.defineAxes('ts1-c', perc_data)
-
-	ts_plot2.defineAxes('ts2-c', abs_data)
-
-	d3.select("#area-title-c")
-		.text(ts_plot1.default_area)
-})
-
-/* add buttons for country summaries */
-
-
-
-
-
-
-
 ac_panel = function(){
-	this.data_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/data/top_n_between.csv?token=AMBPN72AOWQ7XQQ77Q7P35K6YHDES"
+	this.data_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/data/top_n_between.csv?token=AMBPN7Z5M4FWWPHZJ5T2KLC6ZEX54"
 
 	this.data = null
 
@@ -978,6 +659,47 @@ d3.sankey = function() {
   return sankey;
 };
 
+ov_panel = function(){
+	this.image_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.png?token=AMBPN77JGGJC7WCEQJFNAGS6ZJOBW"
+	this.image_svg_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/images/colocation_plot.svg?token=AMBPN72Q3JPY4GHSSRTLM226YDTVE"
+	this.setupOvPanel = function(){
+
+		this.container = d3.select("#panel-c")
+			.append("div")
+			.attr("class", "ov-container")
+		
+		containerDims = this.container.node().getBoundingClientRect();
+
+		this.container
+			.append("div")
+			.attr("class", "area-title-container")
+			.text("Facebook Colocation Data")
+
+		this.container 
+			.append("img")
+				.attr("src", this.image_url)
+				.attr("class", "ov-image")
+
+		this.container.append("div")
+			.attr("class", "ov-blurb")
+
+		$(".ov-blurb").html(this.blurb_text)
+				
+	}
+
+	this.blurb_text = null
+}
+
+var blurb_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/blurb.html?token=AMBPN76YXBH2X477JHLXUY26ZB364"
+
+$.ajax({
+    url : blurb_url,
+    dataType: "text",
+    success : function (data) {
+    	ov_panel1.blurb_text = data
+        $(".ov-blurb").html(data);
+    }
+});
 description_panel = function(){
 	this.fb_image_url = "https://assets.themuse.com/uploaded/companies/659/small_logo.png?v=e06509d06aae79458f7a2fe65f39bcb4cca56e964dd6d9e0390386ca1829e55a"
 	this.cmmid_image_url = "https://www.lshtm.ac.uk/sites/default/files/styles/centre_header_logo/public/cmmid.jpg?itok=DVpjwx1l"
@@ -1044,7 +766,7 @@ description_panel = function(){
 			.append("div")
 			.attr("class", "author-container")
 			.attr("id", "author-panel")
-			.text("Visualisation by Hamish Gibbs. Supported by CMMID Covid-19 Working Group, Rosalind M Eggo, and Adam Kucharski.")
+			.text("Visualisation by Hamish Gibbs. Supported by CMMID Covid-19 Working Group, Rosalind M Eggo, Chris Grundy, and Adam Kucharski.")
 
 		$(".description-text").html(this.description_text)
 		
@@ -1211,3 +933,282 @@ $("#active-button").click()
 /* within each button click - hold the panel setup function */
 
 /*load data from urls and add as a window attribute */
+addDropdownElement
+
+ts_data_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/data/mean_ts.csv?token=AMBPN77B6ZW36RRVNPGE2C26ZEX3C"
+
+var parseTime = d3.timeParse("%Y-%m-%d");
+
+ts_plot = function(){
+	this.data = null;
+
+	this.area_names = null;
+
+	this.y_label = null;
+
+	this.dataset_type = null;
+
+	this.default_area = "Greater London";
+
+	this.margin = {top: 0, right: 30, bottom: 50, left: 70}
+
+	this.printData = function(){console.log(this.data)};
+
+	this.appendSVG = function(panel_id, container_id, container_cls, svg_id, svg_cls){
+
+		this.panel = d3.select("#" + panel_id)
+		this.container = d3.select("#" + container_id)
+
+		d3.select("#" + panel_id)
+			.append('div')
+			.attr("id", container_id)
+			.attr("class", container_cls)
+
+		this.svg = d3.select('#' + container_id)
+			.append('svg')
+			.attr("id", svg_id)
+			.attr("class", svg_cls)
+			.append("g")
+    		.attr("transform",
+          "translate(" + this.margin.left + "," + this.margin.top + ")");
+			
+	};
+
+	this.defineAxes = function(container_id, data){
+
+		console.log(d3.select("#" + container_id))
+
+		var containerDims = d3.select("#" + container_id).node().getBoundingClientRect();
+		
+		this.width = containerDims.width - this.margin.left - this.margin.right;
+		this.height = containerDims.height - this.margin.top - this.margin.bottom;
+
+		this.x = d3.scaleTime().range([0, this.width]);
+		this.y = d3.scaleLinear().range([this.height, 0]);
+
+		this.x.domain(d3.extent(data, function(d) { return d.ds; }));
+  		this.y.domain([d3.min(data, function(d) { return d.mean_colocation; }), d3.max(data, function(d) { return d.mean_colocation; })]);
+  		
+
+  		var x = this.x
+  		var y = this.y
+
+  		/*namespace issue - not this */ 
+  		this.plotLine = d3.line()
+    					.x(function(d) { return x(d.ds); })
+    					.y(function(d) { return y(d.mean_colocation); });
+	};
+
+	this.layoutPlot = function(){
+
+		this.svg
+			.append("g")
+			.attr("transform", "translate(0," + this.height + ")")
+			.call(d3.axisBottom(this.x));
+
+		this.svg
+			.append("g")
+      		.call(d3.axisLeft(this.y));
+
+      	this.svg
+	    	.append("text")
+	        .attr("transform", "rotate(-90)")
+	        .attr("y", 0 - this.margin.left)
+	        .attr("x",0 - (this.height / 2))
+	        .attr("dy", "1em")
+	        .style("text-anchor", "middle")
+	        .text(this.y_label);
+
+	    this.addPlotContent(this.default_area)
+
+	    this.tooltip_div = this.container.append("div")	
+    		.attr("class", "tooltip")				
+    		.style("opacity", 0);
+	      
+	};
+
+    this.addPlotContent = function(area){
+
+    	if (['England', 'Wales', 'Scotland', 'Northern Ireland'].includes(area)){
+    		plot_data = this.data.filter(function(d){ return d.NAME_1 == area;})
+
+    		area_names = plot_data.map(function(d){ return d.polygon1_name }).filter( onlyUnique )
+
+    		for(i in area_names){
+    			area_data = plot_data.filter(function(d){ return d.polygon1_name == area_names[i];})
+
+    			this.svg
+	    		.append("path")
+	      		.data([area_data])
+	      		.attr("class", "ts-plot-content summary" + " " + this.dataset_type)
+	      		.attr("d", this.plotLine)
+	      		.attr("value", area_names[i])
+	      		.on("mouseover", this.changeTitle)
+	      		.on("mouseout", this.resetTitle);
+
+    		}
+
+    	}else{
+    		plot_data = this.data.filter(function(d){ return d.polygon1_name == area;})
+
+    		this.svg
+	    		.append("path")
+	      		.data([plot_data])
+	      		.attr("class", "ts-plot-content" + " " + this.dataset_type)
+	      		.attr("d", this.plotLine);
+
+    	}
+    	
+    	/* line not appearing correctly here - style issue?*/ 
+
+    };
+
+    this.changeTitle = function(){
+
+    	var hovered_area = d3.select(this).attr("value")
+
+    	d3.select("#area-title-c")
+			.text(hovered_area)
+
+		styleArea(hovered_area, 'area-selected')
+	}
+
+	this.resetTitle = function(){
+		console.log(d3.select("#summary-button-active").text())
+    	d3.select("#area-title-c")
+			.text(d3.select("#summary-button-active").text())
+
+		unstyleArea('area-selected')
+	}
+
+
+    this.removePlotContent = function(){
+    	d3.selectAll('.ts-plot-content').remove()
+    }
+
+}
+
+
+/*add div to hold title */
+createTsSummaryButtons = function(panel_id){
+		
+		d3.select("#" + panel_id)
+			.append("div")
+		    .attr("class", "button-spacer")
+
+		d3.select("#" + panel_id)
+			.append("button")
+			.attr("value", "England")
+			.text("England")
+			.attr("class", "summary-button")
+			.on("click", summaryButtonClick)
+
+		d3.select("#" + panel_id)
+			.append("div")
+		    .attr("class", "button-spacer")
+
+		d3.select("#" + panel_id)
+			.append("button")
+			.attr("value", "Wales")
+			.text("Wales")
+			.attr("class", "summary-button")
+			.on("click", summaryButtonClick)
+	
+		d3.select("#" + panel_id)
+			.append("div")
+		    .attr("class", "button-spacer")
+
+		d3.select("#" + panel_id)
+			.append("button")
+			.attr("value", "Scotland")
+			.text("Scotland")
+			.attr("class", "summary-button")
+			.on("click", summaryButtonClick)
+
+		d3.select("#" + panel_id)
+			.append("div")
+		    .attr("class", "button-spacer")
+		 
+		d3.select("#" + panel_id)
+			.append("button")
+			.attr("value", "Northern Ireland")
+			.text("Northern Ireland")
+			.attr("class", "summary-button")
+			.on("click", summaryButtonClick)
+}
+
+summaryButtonClick = function(){
+
+	d3.selectAll(".summary-button")
+		.attr("id", null)
+
+	d3.select(this)
+		.attr("id", "summary-button-active")
+
+	ts_plot1.removePlotContent()
+
+	ts_plot2.removePlotContent()
+
+	ts_plot1.addPlotContent(this.value)
+
+	ts_plot2.addPlotContent(this.value)
+
+	d3.select("#area-title-c")
+		.text(this.value)
+}
+
+
+var ts_plot1 = new ts_plot()
+
+ts_plot1.y_label = "% change of colocation probabilty outside home area"
+
+ts_plot1.appendSVG('panel-c', 'ts1-c', 'ts-container', 'ts1', 'ts-plot')
+
+var ts_plot2 = new ts_plot()
+
+ts_plot2.y_label = "Probabilty of colocation outside home area"
+
+ts_plot2.appendSVG('panel-c', 'ts2-c', 'ts-container', 'ts2', 'ts-plot')
+
+ts_plot1.dataset_type = 'between'
+
+ts_plot2.dataset_type = 'within'
+
+/* remember to parse up here */
+Promise.all([d3.csv(ts_data_url, d3.autoType)]).then(function(data){
+
+	data = data[0]
+	/*parsing issue */
+	area_names = data.map(function(d){ return d.polygon1_name }).filter( onlyUnique )
+
+	ts_plot1.area_names = area_names
+
+	for (i in area_names){
+		addDropdownElement(area_names[i], area_names[i], "dropdown-element", "area-d")
+	}
+
+	perc_data = data.filter(function(d){ return d.type == 'perc_change';})
+	/* threshold within data so that it is < 0.025 (remove outliers) */
+	perc_data = perc_data.filter(function(d){ return d.mean_colocation <= 200;})
+
+	abs_data = data.filter(function(d){ return d.type == 'abs_value';})
+
+	/* divide data within and between */
+	ts_plot1.data = perc_data
+	ts_plot2.data = abs_data
+
+	ts_plot1.defineAxes('ts1-c', perc_data)
+
+	ts_plot2.defineAxes('ts2-c', abs_data)
+
+	d3.select("#area-title-c")
+		.text(ts_plot1.default_area)
+})
+
+/* add buttons for country summaries */
+
+
+
+
+
+

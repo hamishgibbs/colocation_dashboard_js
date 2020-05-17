@@ -1,6 +1,6 @@
 addDropdownElement
 
-ts_data_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/data/mean_ts.csv?token=AMBPN75YWOFQOKKCQ6GJIB26X6JJE"
+ts_data_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/data/mean_ts.csv?token=AMBPN77B6ZW36RRVNPGE2C26ZEX3C"
 
 var parseTime = d3.timeParse("%Y-%m-%d");
 
@@ -40,6 +40,8 @@ ts_plot = function(){
 	};
 
 	this.defineAxes = function(container_id, data){
+
+		console.log(d3.select("#" + container_id))
 
 		var containerDims = d3.select("#" + container_id).node().getBoundingClientRect();
 		
@@ -128,9 +130,12 @@ ts_plot = function(){
 
     this.changeTitle = function(){
 
-    	d3.select("#area-title-c")
-			.text(d3.select(this).attr("value"))
+    	var hovered_area = d3.select(this).attr("value")
 
+    	d3.select("#area-title-c")
+			.text(hovered_area)
+
+		styleArea(hovered_area, 'area-selected')
 	}
 
 	this.resetTitle = function(){
@@ -138,6 +143,7 @@ ts_plot = function(){
     	d3.select("#area-title-c")
 			.text(d3.select("#summary-button-active").text())
 
+		unstyleArea('area-selected')
 	}
 
 
@@ -251,14 +257,10 @@ Promise.all([d3.csv(ts_data_url, d3.autoType)]).then(function(data){
 	perc_data = perc_data.filter(function(d){ return d.mean_colocation <= 200;})
 
 	abs_data = data.filter(function(d){ return d.type == 'abs_value';})
-	
-	console.log(perc_data)
-	console.log(abs_data)
 
 	/* divide data within and between */
 	ts_plot1.data = perc_data
 	ts_plot2.data = abs_data
-
 
 	ts_plot1.defineAxes('ts1-c', perc_data)
 
