@@ -225,7 +225,7 @@ summaryButtonClick = function(){
 
 var ts_plot1 = new ts_plot()
 
-ts_plot1.y_label = "% change of colocation probabilty outside home area"
+ts_plot1.y_label = "colocation probabilty % change outside home area"
 
 ts_plot1.appendSVG('panel-c', 'ts1-c', 'ts-container', 'ts1', 'ts-plot')
 
