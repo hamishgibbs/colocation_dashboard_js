@@ -25,9 +25,6 @@ ac_panel = function(){
 		/* this may cause an error */
 		this.path = this.sankey.link();
 
-
-
-
 	}
 
 	this.addPlotContent = function(area){
@@ -40,8 +37,6 @@ ac_panel = function(){
 
 		plot_data = this.data.filter(function(d){ return d.polygon1_name == area;})
 
-		console.log(plot_data)
-
 		graph = {"nodes" : [], "links" : []};
 
 		plot_data.forEach(function (d) {
@@ -51,8 +46,6 @@ ac_panel = function(){
 		                       "target": d.polygon2_name,
 		                       "value": +d.mean_colocation });
 	   	});
-
-	   	console.log(graph)
 
 	   	// return only the distinct / unique nodes
 		  graph.nodes = d3.keys(d3.nest()
@@ -147,6 +140,18 @@ ac_panel = function(){
 		.attr("class", "ac-plot-content")
   }
 
+  this.addCaption = function(){
+
+      d3.select('#panel-c')
+        .append('div')
+        .attr("class", "figure-caption")
+      .attr("id", "ac-caption")
+
+    console.log(fig_captions1.ac_caption)
+
+    $("#ac-caption").html(fig_captions1.ac_caption)
+  }
+
   this.linkMouseOver = function(){
   	hovered_area = d3.select(this).attr("value")
 
@@ -168,7 +173,6 @@ ac_panel = function(){
 ac_panel1 = new ac_panel
 
 ac_panel1.sankeyClick = function(){
-      console.log(this)
       area_name = d3.select(this).attr('area-name')
 
       unstyleArea("area-selected")

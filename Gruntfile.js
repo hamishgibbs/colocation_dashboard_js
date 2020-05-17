@@ -17,6 +17,7 @@ module.exports = function(grunt) {
       	},
 	      dist: {
 	      src: ['src/utils.js',
+            'src/load_figure_text.js',
 	      		'src/map_setup.js',
 	      		'src/create_map.js',
 	      		'src/area_compare_panel.js',

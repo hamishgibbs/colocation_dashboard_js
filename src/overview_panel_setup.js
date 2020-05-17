@@ -20,6 +20,14 @@ ov_panel = function(){
 				.attr("class", "ov-image")
 
 		this.container.append("div")
+			.attr("class", "figure-caption")
+			.attr("id", "ov-caption")
+
+		try {
+			$("#ov-caption").html(fig_captions1.ov_caption)
+		}catch(error){console.log(error)}
+
+		this.container.append("div")
 			.attr("class", "ov-blurb")
 
 		$(".ov-blurb").html(this.blurb_text)

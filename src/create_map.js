@@ -13,8 +13,6 @@ var projection = d3.geoMercator()
 					.scale(2200)
 					.center([-4.5, 55]);
 
-console.log(map_svg_dims.width * 5.5)
-
 var path = d3.geoPath().projection(projection);
 
 

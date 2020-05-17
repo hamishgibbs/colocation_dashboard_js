@@ -17,8 +17,6 @@ ts_plot = function(){
 
 	this.margin = {top: 0, right: 30, bottom: 50, left: 70}
 
-	this.printData = function(){console.log(this.data)};
-
 	this.appendSVG = function(panel_id, container_id, container_cls, svg_id, svg_cls){
 
 		this.panel = d3.select("#" + panel_id)
@@ -40,8 +38,6 @@ ts_plot = function(){
 	};
 
 	this.defineAxes = function(container_id, data){
-
-		console.log(d3.select("#" + container_id))
 
 		var containerDims = d3.select("#" + container_id).node().getBoundingClientRect();
 		
@@ -128,6 +124,16 @@ ts_plot = function(){
 
     };
 
+    this.addCaption = function(){
+
+    	d3.select('#panel-c')
+    		.append('div')
+    		.attr("class", "figure-caption")
+			.attr("id", "ts-caption")
+
+		$("#ts-caption").html(fig_captions1.ts_caption)
+    }
+
     this.changeTitle = function(){
 
     	var hovered_area = d3.select(this).attr("value")
@@ -139,7 +145,6 @@ ts_plot = function(){
 	}
 
 	this.resetTitle = function(){
-		console.log(d3.select("#summary-button-active").text())
     	d3.select("#area-title-c")
 			.text(d3.select("#summary-button-active").text())
 

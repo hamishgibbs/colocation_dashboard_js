@@ -53,6 +53,47 @@ unstyleArea = function(cls){
   	selected_area.attr("class", "country " + country)
 }
 
+
+figure_captions = function(){
+	this.ov_caption_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/ov_fig_caption.html"
+	this.ts_caption_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/ts_fig_caption.html"
+	this.ac_caption_url = "https://raw.githubusercontent.com/hamishgibbs/colocation_dashboard/master/UK/text/ac_fig_caption.html"
+
+	this.ov_caption = null
+	this.ts_caption = null
+	this.ac_caption = null
+
+
+}
+
+fig_captions1 = new figure_captions()
+
+$.ajax({
+    url : fig_captions1.ov_caption_url,
+    dataType: "text",
+    success : function (data) {
+    	fig_captions1.ov_caption = data
+    	$("#ov-caption").html(fig_captions1.ov_caption)
+    }
+});
+
+$.ajax({
+    url : fig_captions1.ts_caption_url,
+    dataType: "text",
+    success : function (data) {
+    	fig_captions1.ts_caption = data
+    }
+});
+
+$.ajax({
+    url : fig_captions1.ac_caption_url,
+    dataType: "text",
+    success : function (data) {
+    	fig_captions1.ac_caption = data
+    }
+});
+
+//$(".ov-blurb").html(data);
 /* keep all css definitions in the css file */
 d3.select("#map-c")
 	.append("svg")
@@ -108,8 +149,6 @@ var projection = d3.geoMercator()
 					.translate([map_svg_dims.width/2, map_svg_dims.height/2])
 					.scale(2200)
 					.center([-4.5, 55]);
-
-console.log(map_svg_dims.width * 5.5)
 
 var path = d3.geoPath().projection(projection);
 
@@ -205,9 +244,6 @@ ac_panel = function(){
 		/* this may cause an error */
 		this.path = this.sankey.link();
 
-
-
-
 	}
 
 	this.addPlotContent = function(area){
@@ -220,8 +256,6 @@ ac_panel = function(){
 
 		plot_data = this.data.filter(function(d){ return d.polygon1_name == area;})
 
-		console.log(plot_data)
-
 		graph = {"nodes" : [], "links" : []};
 
 		plot_data.forEach(function (d) {
@@ -231,8 +265,6 @@ ac_panel = function(){
 		                       "target": d.polygon2_name,
 		                       "value": +d.mean_colocation });
 	   	});
-
-	   	console.log(graph)
 
 	   	// return only the distinct / unique nodes
 		  graph.nodes = d3.keys(d3.nest()
@@ -327,6 +359,18 @@ ac_panel = function(){
 		.attr("class", "ac-plot-content")
   }
 
+  this.addCaption = function(){
+
+      d3.select('#panel-c')
+        .append('div')
+        .attr("class", "figure-caption")
+      .attr("id", "ac-caption")
+
+    console.log(fig_captions1.ac_caption)
+
+    $("#ac-caption").html(fig_captions1.ac_caption)
+  }
+
   this.linkMouseOver = function(){
   	hovered_area = d3.select(this).attr("value")
 
@@ -348,7 +392,6 @@ ac_panel = function(){
 ac_panel1 = new ac_panel
 
 ac_panel1.sankeyClick = function(){
-      console.log(this)
       area_name = d3.select(this).attr('area-name')
 
       unstyleArea("area-selected")
@@ -681,6 +724,14 @@ ov_panel = function(){
 				.attr("class", "ov-image")
 
 		this.container.append("div")
+			.attr("class", "figure-caption")
+			.attr("id", "ov-caption")
+
+		try {
+			$("#ov-caption").html(fig_captions1.ov_caption)
+		}catch(error){console.log(error)}
+
+		this.container.append("div")
 			.attr("class", "ov-blurb")
 
 		$(".ov-blurb").html(this.blurb_text)
@@ -826,7 +877,11 @@ tsButtonClick = function(){
 
 	createTsSummaryButtons("panel-c")
 
-	unstyleArea('area-active')
+	console.log(ts_plot1)
+
+	ts_plot1.addCaption()
+
+	try{unstyleArea('area-active')}catch(error){console.log(error)}
 }
 
 
@@ -844,7 +899,7 @@ ovButtonClick = function(){
 
 	ov_panel1.setupOvPanel()
 
-	unstyleArea('area-active')
+	try{unstyleArea('area-active')}catch(error){console.log(error)}
 
 }
 
@@ -861,7 +916,7 @@ ddButtonClick = function(){
 
 	description_panel1.setupDdPanel()
 
-	unstyleArea('area-active')
+	try{unstyleArea('area-active')}catch(error){console.log(error)}
 
 }
 
@@ -876,9 +931,11 @@ acButtonClick = function(){
 
 	ac_panel1.setupAcPanel()
 
+	ac_panel1.addCaption()
+
 	ac_panel1.addPlotContent(ac_panel1.default_area)
 
-	unstyleArea('area-active')
+	try{unstyleArea('area-active')}catch(error){console.log(error)}
 }
 
 /*in this panel - just give premade pngs */
@@ -959,8 +1016,6 @@ ts_plot = function(){
 
 	this.margin = {top: 0, right: 30, bottom: 50, left: 70}
 
-	this.printData = function(){console.log(this.data)};
-
 	this.appendSVG = function(panel_id, container_id, container_cls, svg_id, svg_cls){
 
 		this.panel = d3.select("#" + panel_id)
@@ -982,8 +1037,6 @@ ts_plot = function(){
 	};
 
 	this.defineAxes = function(container_id, data){
-
-		console.log(d3.select("#" + container_id))
 
 		var containerDims = d3.select("#" + container_id).node().getBoundingClientRect();
 		
@@ -1070,6 +1123,16 @@ ts_plot = function(){
 
     };
 
+    this.addCaption = function(){
+
+    	d3.select('#panel-c')
+    		.append('div')
+    		.attr("class", "figure-caption")
+			.attr("id", "ts-caption")
+
+		$("#ts-caption").html(fig_captions1.ts_caption)
+    }
+
     this.changeTitle = function(){
 
     	var hovered_area = d3.select(this).attr("value")
@@ -1081,7 +1144,6 @@ ts_plot = function(){
 	}
 
 	this.resetTitle = function(){
-		console.log(d3.select("#summary-button-active").text())
     	d3.select("#area-title-c")
 			.text(d3.select("#summary-button-active").text())
 
