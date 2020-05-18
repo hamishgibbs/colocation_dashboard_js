@@ -23,18 +23,22 @@ $('select').on('change', function() {
 
     area_name = this.value
 
-	ts_plot1.removePlotContent()
+    if (active_panel == 'Time series'){
+		ts_plot1.removePlotContent()
 
-	ts_plot1.addPlotContent(area_name)
+		ts_plot1.addPlotContent(area_name)
 
-	ts_plot2.addPlotContent(area_name)
+		ts_plot2.addPlotContent(area_name)
 
-	d3.select("#area-title-c")
+		d3.select("#area-title-c")
 		.text(area_name)
+		
+	}else if(active_panel == 'Area comparison'){
+		ac_panel1.removePlotContent(area_name)
 
-	ac_panel1.removePlotContent(area_name)
-
-	ac_panel1.addPlotContent(area_name)
+		ac_panel1.addPlotContent(area_name)
+	}
+	
 
 });
 

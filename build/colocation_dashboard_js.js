@@ -1,4 +1,4 @@
-/*! colocation_dashboard_js 2020-05-17 */
+/*! colocation_dashboard_js 2020-05-18 */
 
 function onlyUnique(value, index, self) { 
     return self.indexOf(value) === index;
@@ -52,6 +52,7 @@ unstyleArea = function(cls){
 
   	selected_area.attr("class", "country " + country)
 }
+
 
 
 figure_captions = function(){
@@ -119,18 +120,22 @@ $('select').on('change', function() {
 
     area_name = this.value
 
-	ts_plot1.removePlotContent()
+    if (active_panel == 'Time series'){
+		ts_plot1.removePlotContent()
 
-	ts_plot1.addPlotContent(area_name)
+		ts_plot1.addPlotContent(area_name)
 
-	ts_plot2.addPlotContent(area_name)
+		ts_plot2.addPlotContent(area_name)
 
-	d3.select("#area-title-c")
+		d3.select("#area-title-c")
 		.text(area_name)
+		
+	}else if(active_panel == 'Area comparison'){
+		ac_panel1.removePlotContent(area_name)
 
-	ac_panel1.removePlotContent(area_name)
-
-	ac_panel1.addPlotContent(area_name)
+		ac_panel1.addPlotContent(area_name)
+	}
+	
 
 });
 
@@ -202,19 +207,23 @@ mainMapClick = function(){
 
 	area_name = d3.select(this).attr("polygon-name")
 
-	ts_plot1.removePlotContent()
+	active_panel = d3.select("#active-button").text()
 
-	ts_plot1.addPlotContent(area_name)
+	if (active_panel == 'Time series'){
+		ts_plot1.removePlotContent()
 
-	ts_plot2.addPlotContent(area_name)
+		ts_plot1.addPlotContent(area_name)
 
-	d3.select("#area-title-c")
+		ts_plot2.addPlotContent(area_name)
+
+		d3.select("#area-title-c")
 		.text(area_name)
+		
+	}else if(active_panel == 'Area comparison'){
+		ac_panel1.removePlotContent(area_name)
 
-	ac_panel1.removePlotContent(area_name)
-
-	ac_panel1.addPlotContent(area_name)
-
+		ac_panel1.addPlotContent(area_name)
+	}
 
 }
 ac_panel = function(){
@@ -871,6 +880,10 @@ tsButtonClick = function(){
 
 	ts_plot2.appendSVG('panel-c', 'ts2-c', 'ts-container', 'ts2', 'ts-plot')
 
+	ts_plot1.defineAxes('ts1-c', ts_plot1.data)
+
+	ts_plot2.defineAxes('ts2-c', ts_plot2.data)
+
 	ts_plot1.layoutPlot()
 	ts_plot2.layoutPlot()
 
@@ -881,7 +894,6 @@ tsButtonClick = function(){
 
 	ts_plot1.addCaption()
 
-	try{unstyleArea('area-active')}catch(error){console.log(error)}
 }
 
 
@@ -935,7 +947,8 @@ acButtonClick = function(){
 
 	ac_panel1.addCaption()
 
-	try{unstyleArea('area-active')}catch(error){console.log(error)}
+	//try{unstyleArea('area-active')}catch(error){console.log(error)}
+	//styleArea(area, 'area-active')
 }
 
 /*in this panel - just give premade pngs */
@@ -969,7 +982,7 @@ d3.select("#panel-select-c")
 d3.select("#panel-select-c")
 		.append("button")
 		.attr("value", "ac")
-		.text("Area Comparison")
+		.text("Area comparison")
 		.attr("class", "panel-button")
 		.on("click", acButtonClick);
 
@@ -1089,6 +1102,12 @@ ts_plot = function(){
 
     this.addPlotContent = function(area){
 
+    	try {
+	        unstyleArea('area-active')
+	    }catch(error) {
+	        console.log(error)
+	    };
+
     	if (['England', 'Wales', 'Scotland', 'Northern Ireland'].includes(area)){
     		plot_data = this.data.filter(function(d){ return d.NAME_1 == area;})
 
@@ -1116,6 +1135,8 @@ ts_plot = function(){
 	      		.data([plot_data])
 	      		.attr("class", "ts-plot-content" + " " + this.dataset_type)
 	      		.attr("d", this.plotLine);
+
+	        styleArea(area, 'area-active')
 
     	}
     	
@@ -1231,13 +1252,9 @@ var ts_plot1 = new ts_plot()
 
 ts_plot1.y_label = "% change of mean colocation probability"
 
-ts_plot1.appendSVG('panel-c', 'ts1-c', 'ts-container', 'ts1', 'ts-plot')
-
 var ts_plot2 = new ts_plot()
 
 ts_plot2.y_label = "Mean probability of colocation"
-
-ts_plot2.appendSVG('panel-c', 'ts2-c', 'ts-container', 'ts2', 'ts-plot')
 
 ts_plot1.dataset_type = 'between'
 
@@ -1274,10 +1291,6 @@ Promise.all([d3.csv(ts_data_url, d3.autoType)]).then(function(data){
 	/* divide data within and between */
 	ts_plot1.data = perc_data
 	ts_plot2.data = abs_data
-
-	ts_plot1.defineAxes('ts1-c', perc_data)
-
-	ts_plot2.defineAxes('ts2-c', abs_data)
 
 	d3.select("#area-title-c")
 		.text(ts_plot1.default_area)

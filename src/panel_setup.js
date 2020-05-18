@@ -32,6 +32,10 @@ tsButtonClick = function(){
 
 	ts_plot2.appendSVG('panel-c', 'ts2-c', 'ts-container', 'ts2', 'ts-plot')
 
+	ts_plot1.defineAxes('ts1-c', ts_plot1.data)
+
+	ts_plot2.defineAxes('ts2-c', ts_plot2.data)
+
 	ts_plot1.layoutPlot()
 	ts_plot2.layoutPlot()
 
@@ -42,7 +46,6 @@ tsButtonClick = function(){
 
 	ts_plot1.addCaption()
 
-	try{unstyleArea('area-active')}catch(error){console.log(error)}
 }
 
 
@@ -96,7 +99,8 @@ acButtonClick = function(){
 
 	ac_panel1.addCaption()
 
-	try{unstyleArea('area-active')}catch(error){console.log(error)}
+	//try{unstyleArea('area-active')}catch(error){console.log(error)}
+	//styleArea(area, 'area-active')
 }
 
 /*in this panel - just give premade pngs */
@@ -130,7 +134,7 @@ d3.select("#panel-select-c")
 d3.select("#panel-select-c")
 		.append("button")
 		.attr("value", "ac")
-		.text("Area Comparison")
+		.text("Area comparison")
 		.attr("class", "panel-button")
 		.on("click", acButtonClick);
 

@@ -51,3 +51,4 @@ unstyleArea = function(cls){
 
   	selected_area.attr("class", "country " + country)
 }
+

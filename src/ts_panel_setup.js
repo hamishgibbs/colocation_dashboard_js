@@ -90,6 +90,12 @@ ts_plot = function(){
 
     this.addPlotContent = function(area){
 
+    	try {
+	        unstyleArea('area-active')
+	    }catch(error) {
+	        console.log(error)
+	    };
+
     	if (['England', 'Wales', 'Scotland', 'Northern Ireland'].includes(area)){
     		plot_data = this.data.filter(function(d){ return d.NAME_1 == area;})
 
@@ -117,6 +123,8 @@ ts_plot = function(){
 	      		.data([plot_data])
 	      		.attr("class", "ts-plot-content" + " " + this.dataset_type)
 	      		.attr("d", this.plotLine);
+
+	        styleArea(area, 'area-active')
 
     	}
     	
@@ -232,13 +240,9 @@ var ts_plot1 = new ts_plot()
 
 ts_plot1.y_label = "% change of mean colocation probability"
 
-ts_plot1.appendSVG('panel-c', 'ts1-c', 'ts-container', 'ts1', 'ts-plot')
-
 var ts_plot2 = new ts_plot()
 
 ts_plot2.y_label = "Mean probability of colocation"
-
-ts_plot2.appendSVG('panel-c', 'ts2-c', 'ts-container', 'ts2', 'ts-plot')
 
 ts_plot1.dataset_type = 'between'
 
@@ -275,10 +279,6 @@ Promise.all([d3.csv(ts_data_url, d3.autoType)]).then(function(data){
 	/* divide data within and between */
 	ts_plot1.data = perc_data
 	ts_plot2.data = abs_data
-
-	ts_plot1.defineAxes('ts1-c', perc_data)
-
-	ts_plot2.defineAxes('ts2-c', abs_data)
 
 	d3.select("#area-title-c")
 		.text(ts_plot1.default_area)
