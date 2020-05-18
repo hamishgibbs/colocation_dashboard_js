@@ -28,10 +28,21 @@ module.exports = function(grunt) {
 	      dest: 'build/<%= pkg.name %>.js',
 	    }
     },
+    cssmin: {
+      options: {
+        mergeIntoShorthands: false,
+        roundingPrecision: -1
+      },
+      target: {
+        files: {
+          'build/<%= pkg.name %>.min.css': ['build/<%= pkg.name %>.css']
+        }
+      }
+    },
     watch: {
       scripts: {
           files: 'src/*.js',
-          tasks: ['concat', 'uglify'],
+          tasks: ['concat', 'uglify', 'cssmin'],
           options: {
               atBegin: true
           }
@@ -45,5 +56,7 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.registerTask('default', ['concat', 'uglify', 'watch']);
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+
+    grunt.registerTask('default', ['concat', 'uglify', 'cssmin', 'watch']);
 };
