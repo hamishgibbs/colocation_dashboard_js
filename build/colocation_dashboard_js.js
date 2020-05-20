@@ -1,4 +1,4 @@
-/*! colocation_dashboard_js 2020-05-18 */
+/*! colocation_dashboard_js 2020-05-20 */
 
 function onlyUnique(value, index, self) { 
     return self.indexOf(value) === index;
